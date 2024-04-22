@@ -27,3 +27,8 @@ h1 {
     /* background-image: url("./images/bird.png"); */
 
 }
+
+.pipes {
+    position: absolute;
+    background-color: black;
+}

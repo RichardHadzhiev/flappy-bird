@@ -55,3 +55,44 @@ class Bird {
 
 const bird = new Bird();
 
+
+class Pipe {
+    constructor(){
+        this.width = 20 ;
+        this.height = 150 
+        this.positionX = 700
+        this.positionY = 0
+        this.pipe = null
+        // this.createPipeTop()
+        this.createPipe();
+        this.moveLeft()
+    }
+    createPipe(){
+        this.pipe = document.createElement("div");
+        this.pipe.className = "pipes";
+        this.pipe.style.width = this.width + "px"
+        this.pipe.style.height = this.height + "px"
+        this.pipe.style.bottom = this.positionY + "px"
+        this.pipe.style.left = this.positionX + "px"
+
+        const newPipe = document.getElementById("background")
+        newPipe.appendChild(this.pipe)
+    }
+    moveLeft(){
+        this.positionX -= 2;
+        this.pipe.style.left = this.positionX + "px"
+        requestAnimationFrame(this.moveLeft.bind(this))
+        
+        
+    }
+}
+
+setInterval(() => {
+    const newP = new Pipe()
+}, 2000);
+
+// setInterval(() => {
+//     pipeArr.forEach((element) => {
+//         element.moveLeft();
+//     })
+// },1000)
