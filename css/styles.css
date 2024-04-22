@@ -1,0 +1,31 @@
+
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+
+}
+h1 {
+    background-color: rgb(240, 190, 174);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: rgb(39, 230, 39);
+    position: relative;
+}
+#background {
+   background: url("./images/background.png") no-repeat;
+   background-size: cover;
+   width: 700px;
+   height: 400px;
+   position: relative;
+    
+}
+
+#bird {
+    position: absolute;
+    background-color: red;
+    /* background-image: url("./images/bird.png"); */
+
+}
