@@ -19,16 +19,25 @@ h1 {
    width: 700px;
    height: 400px;
    position: relative;
+   overflow: hidden;
 }
 
 #bird {
     position: absolute;
-    background-color: red;
-    /* background-image: url("./images/bird.png"); */
+    background-image: url("./images/bird.png");
+    background-size: cover;
 
 }
 
 .pipes {
     position: absolute;
-    background-color: black;
+    background-image: url("./images/pipe1.png");
+    background-size: cover;
+}
+
+.pipeTop{
+    position: absolute;
+    background-image: url("./images/pipe1.png");
+    background-size: cover;
+    transform: rotate(180deg);
 }

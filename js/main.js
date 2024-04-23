@@ -57,42 +57,81 @@ const bird = new Bird();
 
 
 class Pipe {
-    constructor(){
+    constructor(maxY){
         this.width = 20 ;
-        this.height = 150 
+        this.height = 62;
+        // this.minHeight = 50; // 62
+        // this.maxHeight = 200
+        this.minGap = 80 // gap between pipes
+        this.maxGap = 80
         this.positionX = 700
-        this.positionY = 0
-        this.pipe = null
-        // this.createPipeTop()
+        this.bottomPipePositionY = 0;
+        this.bottomPipe = null;
+        this.topPipe = null;
+        this.maxY = maxY
         this.createPipe();
         this.moveLeft()
     }
     createPipe(){
-        this.pipe = document.createElement("div");
-        this.pipe.className = "pipes";
-        this.pipe.style.width = this.width + "px"
-        this.pipe.style.height = this.height + "px"
-        this.pipe.style.bottom = this.positionY + "px"
-        this.pipe.style.left = this.positionX + "px"
+        const gap = Math.floor(Math.random() * (this.maxGap - this.minGap + 1)) + this.minGap
+        console.log(gap)
+        const bottomPipePositionY = Math.floor(Math.random() * (this.maxY - gap))
+        console.log(bottomPipePositionY)
+        const topPipePositionY = maxY - bottomPipePositionY - gap
+        console.log(topPipePositionY)
+
+        // const bottomHeight = Math.floor(Math.random() * (this.maxHeight - this.minHeight + 1) + this.minHeight)
+        // const topHeight = maxY - bottomHeight- gap
+
+
+        //bottom pipe
+        this.bottomPipe = document.createElement("div");
+        this.bottomPipe.className = "pipes";
+        this.bottomPipe.style.width = this.width + "px"
+        this.bottomPipe.style.height =bottomPipePositionY + "px"  //bottomHeight
+        this.bottomPipe.style.bottom = 0 + "px" // .this
+        this.bottomPipe.style.left = this.positionX + "px"
+
+        setInterval(() => {
+            this.bottomPipe.remove()
+            
+        }, 7000);
+
+        //top pipe
+        this.topPipe = document.createElement("div");
+        this.topPipe.className = "pipeTop";
+        this.topPipe.style.width = this.width + "px";
+        this.topPipe.style.height =topPipePositionY + "px"; //topHeight
+        this.topPipe.style.top = 0 + "px"
+        this.topPipe.style.left = this.positionX + "px"
+
+        setInterval(() => {
+            this.topPipe.remove()
+        }, 7000);
+
 
         const newPipe = document.getElementById("background")
-        newPipe.appendChild(this.pipe)
+        newPipe.appendChild(this.bottomPipe)
+        newPipe.appendChild(this.topPipe)
+
     }
     moveLeft(){
         this.positionX -= 2;
-        this.pipe.style.left = this.positionX + "px"
+        this.bottomPipe.style.left = this.positionX + "px"
+        this.topPipe.style.left = this.positionX + "px"
         requestAnimationFrame(this.moveLeft.bind(this))
         
         
     }
 }
-
+// let pipeArr = []
 setInterval(() => {
-    const newP = new Pipe()
+    const newP = new Pipe(maxY)
+    // pipeArr.push(newP)
 }, 2000);
 
 // setInterval(() => {
 //     pipeArr.forEach((element) => {
 //         element.moveLeft();
 //     })
-// },1000)
+// },1000/60)
