@@ -1,13 +1,11 @@
-const maxX = 700;
-const maxY = 400;
 
 
 class Bird {
     constructor(){
-        this.width = 30
-        this.height = 30
-        this.positionY = 200 - this.width / 2
-        this.positionX = 50
+        this.width = 40
+        this.height = 40
+        this.positionY =200 - this.width / 2
+        this.positionX = 100
         this.speedY = 0
         this.gravity = 0.2
         this.gravitySpeed = 0
@@ -15,11 +13,11 @@ class Bird {
 
 
 
-        this.playerElm = document.getElementById("bird")
-        this.playerElm.style.width = this.width + "px"
-        this.playerElm.style.height = this.height + "px"
-        this.playerElm.style.bottom = this.positionY + "px"
-        this.playerElm.style.left = this.positionX + "px"
+        this.birdElm = document.getElementById("bird")
+        this.birdElm.style.width = this.width + "px"
+        this.birdElm.style.height = this.height + "px"
+        this.birdElm.style.bottom = this.positionY + "px"
+        this.birdElm.style.left = this.positionX + "px"
 
         document.addEventListener("keydown",(e) => {
             if(e.code === "Space"){
@@ -32,71 +30,65 @@ class Bird {
     }
 
     moveUp(){
-      this.speedY -= 6;
+      this.speedY -= 5;
     }
     
 
     moveDown(){
         this.speedY += this.gravity
         this.positionY -= this.speedY
-        if(this.positionY >  maxY - this.height){
-            this.positionY = maxY - this.height
-            this.speedY = 0;
+        if(this.positionY >  document.body.clientHeight - this.height){
+            this.positionY = document.body.clientHeight - this.height
+            this.speedY = 0;   
         }
         else if(this.positionY < 0){
             this.positionY = 0;
         }
-        this.playerElm.style.bottom = this.positionY + "px"
+        else if(this.positionY > 0 && this.positionY < 5){
+            this.speedY = 1
+            
+        }
+        this.birdElm.style.bottom = this.positionY + "px"
         requestAnimationFrame(this.moveDown.bind(this))
     
 }
 }
 
 
-const bird = new Bird();
 
 
 class Pipe {
-    constructor(maxY){
-        this.width = 20 ;
-        this.height = 62;
-        // this.minHeight = 50; // 62
-        // this.maxHeight = 200
-        this.minGap = 80 // gap between pipes
-        this.maxGap = 80
-        this.positionX = 700
+    constructor(){
+        this.width = 40 ;
+        this.height = 72;
+        this.minGap = 120 // gap between pipes
+        this.maxGap = 200
+        this.positionX = document.body.clientWidth
         this.bottomPipePositionY = 0;
+        this.topPipePositionY = 0;
         this.bottomPipe = null;
         this.topPipe = null;
-        this.maxY = maxY
         this.createPipe();
         this.moveLeft()
     }
     createPipe(){
         const gap = Math.floor(Math.random() * (this.maxGap - this.minGap + 1)) + this.minGap
-        console.log(gap)
-        const bottomPipePositionY = Math.floor(Math.random() * (this.maxY - gap))
-        console.log(bottomPipePositionY)
-        const topPipePositionY = maxY - bottomPipePositionY - gap
-        console.log(topPipePositionY)
-
-        // const bottomHeight = Math.floor(Math.random() * (this.maxHeight - this.minHeight + 1) + this.minHeight)
-        // const topHeight = maxY - bottomHeight- gap
-
-
+        
+        const bottomPipePositionY = Math.floor(Math.random() * (document.body.clientHeight - gap))
+        const topPipePositionY = document.body.clientHeight - bottomPipePositionY - gap
+    
+        
+        
+        
         //bottom pipe
         this.bottomPipe = document.createElement("div");
         this.bottomPipe.className = "pipes";
         this.bottomPipe.style.width = this.width + "px"
-        this.bottomPipe.style.height =bottomPipePositionY + "px"  //bottomHeight
+        this.bottomPipe.style.height = bottomPipePositionY + "px"  //bottomHeight
         this.bottomPipe.style.bottom = 0 + "px" // .this
         this.bottomPipe.style.left = this.positionX + "px"
-
-        setInterval(() => {
-            this.bottomPipe.remove()
-            
-        }, 7000);
-
+    
+        
         //top pipe
         this.topPipe = document.createElement("div");
         this.topPipe.className = "pipeTop";
@@ -104,34 +96,47 @@ class Pipe {
         this.topPipe.style.height =topPipePositionY + "px"; //topHeight
         this.topPipe.style.top = 0 + "px"
         this.topPipe.style.left = this.positionX + "px"
-
-        setInterval(() => {
-            this.topPipe.remove()
-        }, 7000);
-
-
+        
+        
         const newPipe = document.getElementById("background")
         newPipe.appendChild(this.bottomPipe)
         newPipe.appendChild(this.topPipe)
-
+        
     }
     moveLeft(){
-        this.positionX -= 2;
+        this.positionX -= 1.5;
         this.bottomPipe.style.left = this.positionX + "px"
         this.topPipe.style.left = this.positionX + "px"
-        requestAnimationFrame(this.moveLeft.bind(this))
+        if(this.positionX < 0 ){
+            pipeArr.splice(0,1)
+            this.bottomPipe.remove()
+            this.topPipe.remove()
+        }
+        
+
         
         
     }
 }
-// let pipeArr = []
+const bird = new Bird();
+let pipeArr = [];
 setInterval(() => {
-    const newP = new Pipe(maxY)
-    // pipeArr.push(newP)
-}, 2000);
+    const newP = new Pipe()
+    pipeArr.push(newP)
+}, 3500);
 
-// setInterval(() => {
-//     pipeArr.forEach((element) => {
-//         element.moveLeft();
-//     })
-// },1000/60)
+setInterval(() => {
+    pipeArr.forEach((pipe) => {
+        pipe.moveLeft();  
+        
+        //collision detection
+        if (
+            bird.positionX < pipe.positionX + pipe.width &&
+            bird.positionX + bird.width > pipe.positionX &&
+            bird.positionY < pipe.topPipePositionY + pipe.height &&
+            bird.positionY + bird.height > pipe.topPipePositionY
+        ) {
+            console.log("game over...");
+        }
+    })
+},16)
