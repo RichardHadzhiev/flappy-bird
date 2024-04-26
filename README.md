@@ -1,6 +1,6 @@
 # Description
 
--This is a game where a Bird has to go through a space between Pipes.
+- This is a game where a Bird has to go through a space between Pipes.
 
 # Instructions to Play
 
